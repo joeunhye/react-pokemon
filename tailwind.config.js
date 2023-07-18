@@ -29,7 +29,7 @@ export default {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require("tailwind-scrollbar-hide")],
 	safelist: [
 		{
 			pattern: /(bg|text|border)-(primary|second|third|normal|fire|water|electric|grass|ice|fighting|poison|ground|flying|psychic|bug|rock|ghost|dragon|dark|steel|fairy|none)/,

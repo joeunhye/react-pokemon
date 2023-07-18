@@ -8,4 +8,5 @@ module.exports = {
 		"react-refresh/only-export-components": "warn",
 		"react/prop-types": "off",
 	},
+	node: true,
 };
