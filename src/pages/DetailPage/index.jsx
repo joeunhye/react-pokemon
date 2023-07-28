@@ -8,6 +8,7 @@ import { ArrowLeft } from "./../../assets/ArrowLeft";
 import { Balance } from "./../../assets/Balance";
 import { Vector } from "./../../assets/Vector";
 import Type from "../../components/Type";
+import BaseStat from "../../components/BaseStat";
 
 const DetailPage = () => {
 	const [pokemon, setPokemon] = useState();
@@ -24,7 +25,7 @@ const DetailPage = () => {
 		const url = `${baseUrl}${pokemonId}`;
 		try {
 			const { data: pokemonData } = await axios.get(url);
-			console.log(pokemonData);
+			console.log(pokemon);
 			if (pokemonData) {
 				const { name, id, types, weight, height, stats, abilities } = pokemonData;
 				const nextAndPreviousPokemon = await getNextAndPreviousPokemon(id);
@@ -71,11 +72,11 @@ const DetailPage = () => {
 	async function getNextAndPreviousPokemon(id) {
 		const url = `${baseUrl}?limit=1&offset=${id - 1}`;
 		const { data: pokemonData } = await axios.get(url);
-		const nextResponse = pokemonData.next && (await axios.get(pokemonData.next));
-		const prevResponse = pokemonData.next && (await axios.get(pokemonData.previous));
+		const nextResponse = pokemonData.next && (await axios.get(pokemonData?.next));
+		const prevResponse = pokemonData.previous && (await axios.get(pokemonData?.previous));
 		return {
-			next: nextResponse?.data?.results?.[0].name,
-			previous: prevResponse?.data?.results?.[0].name,
+			next: nextResponse?.data?.results?.[0]?.name,
+			previous: prevResponse?.data?.results?.[0]?.name,
 		};
 	}
 
@@ -156,7 +157,15 @@ const DetailPage = () => {
 						</div>
 					</div>
 					<h2 className={`text-base font-semibold ${text}`}>기본 능력치</h2>
-					<div className="w-full">Stat</div>
+					<div className="w-full">
+						<table className="m-auto">
+							<tbody>
+								{pokemon.stats.map(stat => (
+									<BaseStat key={stat.name} valueStat={stat.baseStat} nameStat={stat.name} type={pokemon.types[0]} />
+								))}
+							</tbody>
+						</table>
+					</div>
 					{pokemon.DamageRelations && (
 						<div className="w-10/12">
 							<h2 className={`text-base text-center font-semibold ${text}`}>데미지 관계</h2>
