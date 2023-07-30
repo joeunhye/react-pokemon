@@ -9,10 +9,13 @@ import { Balance } from "./../../assets/Balance";
 import { Vector } from "./../../assets/Vector";
 import Type from "../../components/Type";
 import BaseStat from "../../components/BaseStat";
+import DamageRelations from "../../components/DamageRelations";
+import DamageModal from "../../components/DamageModal";
 
 const DetailPage = () => {
 	const [pokemon, setPokemon] = useState();
 	const [isLoading, setIsLoading] = useState(true);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const params = useParams();
 	const pokemonId = params.id;
 	const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
@@ -25,7 +28,7 @@ const DetailPage = () => {
 		const url = `${baseUrl}${pokemonId}`;
 		try {
 			const { data: pokemonData } = await axios.get(url);
-			console.log(pokemon);
+
 			if (pokemonData) {
 				const { name, id, types, weight, height, stats, abilities } = pokemonData;
 				const nextAndPreviousPokemon = await getNextAndPreviousPokemon(id);
@@ -59,7 +62,6 @@ const DetailPage = () => {
 	const formatPokemonAbilities = abilities => {
 		return abilities.filter((_, idx) => idx <= 1).map(obj => obj.ability.name.replaceAll("-", " "));
 	};
-
 	const formatPokemonStats = ([statHP, statATK, statDEP, statSATK, statSDEP, statSPD]) => [
 		{ name: "Hit Points", baseStat: statHP.base_stat },
 		{ name: "Attack", baseStat: statATK.base_stat },
@@ -121,7 +123,7 @@ const DetailPage = () => {
 						<div className="text-zinc-200 font-bold text-md">#{pokemon.id.toString().padStart(3, "00")}</div>
 					</div>
 					<div className="relative h-full  max-w-[15.5rem] z-20 mt-6 -mb-16">
-						<img src={img} alt={pokemon.name} width="100%" height="auto" loading="lazy" className="object-contain h-full" />
+						<img src={img} alt={pokemon.name} onClick={() => setIsModalOpen(true)} width="100%" height="auto" loading="lazy" className="object-contain h-full" />
 					</div>
 				</section>
 
@@ -169,10 +171,12 @@ const DetailPage = () => {
 					{pokemon.DamageRelations && (
 						<div className="w-10/12">
 							<h2 className={`text-base text-center font-semibold ${text}`}>데미지 관계</h2>
+							<DamageRelations damages={pokemon.DamageRelations} />
 						</div>
 					)}
 				</section>
 			</div>
+			{isModalOpen && <DamageModal setIsModalOpen={setIsModalOpen} damages={pokemon.DamageRelations} />}
 		</article>
 	);
 };
