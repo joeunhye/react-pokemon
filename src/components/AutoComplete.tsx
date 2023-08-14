@@ -1,20 +1,26 @@
 import { useState } from "react";
+import { PokemonNameAndUrl } from "../types/PokemonData";
 
-const AutoComplete = ({ allpokemons, setDisplayedPokemons }) => {
+interface AutoCompleteProps {
+	allpokemons: PokemonNameAndUrl[];
+	setDisplayedPokemons: React.Dispatch<React.SetStateAction<PokemonNameAndUrl[]>>;
+}
+
+const AutoComplete = ({ allpokemons, setDisplayedPokemons }: AutoCompleteProps) => {
 	const [searchTerm, setSearchTerm] = useState("");
 
-	const filterNames = input => {
+	const filterNames = (input: string) => {
 		const value = input.toLowerCase();
 		return value ? allpokemons.filter(pokemon => pokemon?.name.includes(value)) : [];
 	};
-	const handleSubmit = e => {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		let text = searchTerm.trim();
 		setDisplayedPokemons(filterNames(text));
 		setSearchTerm("");
 	};
 
-	const checkEqualName = input => {
+	const checkEqualName = (input: string) => {
 		const filteredArray = filterNames(input);
 		return filteredArray[0]?.name === input ? [] : filteredArray;
 	};
