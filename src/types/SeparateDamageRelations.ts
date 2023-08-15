@@ -1,8 +1,8 @@
 export interface DamageFromAndTo {
-	to: SeparateDamage;
-	from: SeparateDamage;
+	to: SeparateDamages;
+	from: SeparateDamages;
 }
-export interface SeparateDamage {
+export interface SeparateDamages {
 	double_damage?: Damage[];
 	half_damage?: Damage[];
 	no_damage?: Damage[];
