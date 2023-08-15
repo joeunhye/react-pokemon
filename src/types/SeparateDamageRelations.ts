@@ -9,7 +9,7 @@ export interface SeparateDamages {
 }
 
 export interface Damage {
-	damageValue: DamageValue;
+	damageValue: string;
 	name: string;
 	url: string;
 }
