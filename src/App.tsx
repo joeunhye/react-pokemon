@@ -4,8 +4,10 @@ import MainPage from "./pages/MainPage";
 import DetailPage from "./pages/DetailPage";
 import LoginPage from "./pages/LoginPage";
 import NavBar from "./components/NavBar";
+import {v4} from 'uuid';
 
 const Layout = () => {
+	console.log(v4())
 	return (
 		<>
 			<NavBar />

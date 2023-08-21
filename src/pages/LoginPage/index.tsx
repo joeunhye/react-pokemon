@@ -1,5 +1,3 @@
-import React from "react";
-
 const LoginPage = () => {
 	return (
 		<section className="bg-gray-50 min-h-[90vh] flex items-center justify-center">

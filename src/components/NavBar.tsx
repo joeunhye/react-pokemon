@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { GoogleAuthProvider, getAuth, signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
+import { User, GoogleAuthProvider, getAuth, signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import app from "../firebase";
+import storage from "../utils/storage";
 
-const initialUserData = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")) : {};
+const initialUserData = storage.get<User>('userData')
 
 const NavBar = () => {
 	const auth = getAuth(app);
@@ -12,14 +13,14 @@ const NavBar = () => {
 	const [show, setShow] = useState(false);
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
-	const [userData, setUserData] = useState(initialUserData);
+	const [userData, setUserData] = useState<User | null>(initialUserData);
 
 	const handleAuth = () => {
 		signInWithPopup(auth, provider)
 			.then(result => {
 				console.log(result);
 				setUserData(result.user);
-				localStorage.setItem("userData", JSON.stringify(result.user));
+				storage.set("userData", result.user)
 			})
 			.catch(error => {
 				console.error(error);
@@ -37,7 +38,8 @@ const NavBar = () => {
 	const handleLogout = () => {
 		signOut(auth)
 			.then(() => {
-				setUserData({});
+				storage.remove('userData')
+				setUserData(null);
 			})
 			.catch(err => {
 				alert(err.message);
@@ -74,7 +76,10 @@ const NavBar = () => {
 				<Login onClick={handleAuth}>로그인</Login>
 			) : (
 				<SignOut>
+					{userData?.photoURL && (
+
 					<UserImg src={userData.photoURL} />
+					)}
 					<Dropdown>
 						<span onClick={handleLogout}>Sign Out</span>
 					</Dropdown>
@@ -151,7 +156,7 @@ const Logo = styled.a`
 	margin-top: 4px;
 `;
 
-const NavWrapper = styled.nav`
+const NavWrapper = styled.nav<{ $show: boolean }>`
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -163,7 +168,7 @@ const NavWrapper = styled.nav`
 	padding: 0 36px;
 	letter-spacing: 16px;
 	z-index: 100;
-	background-color: ${props => (props.$show ? "#090b13" : "transparent")};
+	background-color: ${(props: { $show: boolean }) => (props.$show ? "#090b13" : "transparent")};
 `;
 
 export default NavBar;
