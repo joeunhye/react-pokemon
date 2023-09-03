@@ -5,12 +5,12 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: "AIzaSyBv2lJUUbSPsgzvd-LToFbkAeW7iRxk1EE",
-	authDomain: "react-pokemon-d1936.firebaseapp.com",
-	projectId: "react-pokemon-d1936",
-	storageBucket: "react-pokemon-d1936.appspot.com",
-	messagingSenderId: "231296781300",
-	appId: "1:231296781300:web:78258e13ef1776d02907a1",
+	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+	authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+	projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+	storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
+	messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGEINGSENDERID,
+	appId: import.meta.env.VITE_FIREBASE_APIID,
 };
 
 // Initialize Firebase
